@@ -1,0 +1,818 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		810324F42FACCB58008E3152 /* GridCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 810324F32FACCB58008E3152 /* GridCell.swift */; };
+		81032B5F2FB05A19008E3152 /* AppButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81032B5E2FB05A19008E3152 /* AppButton.swift */; };
+		811635D42FA90BFB00099D36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 811635CD2FA90BFB00099D36 /* Assets.xcassets */; };
+		811635D62FA90BFB00099D36 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 811635D02FA90BFB00099D36 /* LaunchScreen.storyboard */; };
+		811635D72FA90BFB00099D36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635CC2FA90BFB00099D36 /* AppDelegate.swift */; };
+		811635D82FA90BFB00099D36 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635D12FA90BFB00099D36 /* SceneDelegate.swift */; };
+		811635E02FA90C2100099D36 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635DD2FA90C2100099D36 /* AppCoordinator.swift */; };
+		811635E12FA90C2100099D36 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635DC2FA90C2100099D36 /* Coordinator.swift */; };
+		811635E22FA90C2100099D36 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635DE2FA90C2100099D36 /* MainCoordinator.swift */; };
+		811635EE2FA90C2B00099D36 /* BooksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635E42FA90C2B00099D36 /* BooksViewController.swift */; };
+		811635EF2FA90C2B00099D36 /* BooksCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635E32FA90C2B00099D36 /* BooksCoordinator.swift */; };
+		811635F02FA90C2B00099D36 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635E92FA90C2B00099D36 /* MovieDetailViewController.swift */; };
+		811635F12FA90C2B00099D36 /* MoviesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635E72FA90C2B00099D36 /* MoviesCoordinator.swift */; };
+		811635F22FA90C2B00099D36 /* BookDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635E52FA90C2B00099D36 /* BookDetailViewController.swift */; };
+		811635F32FA90C2B00099D36 /* MoviesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635E82FA90C2B00099D36 /* MoviesViewController.swift */; };
+		811635F42FA90C2B00099D36 /* WikiCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635EB2FA90C2B00099D36 /* WikiCoordinator.swift */; };
+		811635F52FA90C2B00099D36 /* WikiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811635EC2FA90C2B00099D36 /* WikiViewController.swift */; };
+		814B9D132FB4C82A005FC6E4 /* SummarySectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814B9D122FB4C82A005FC6E4 /* SummarySectionView.swift */; };
+		8158BCEE2FB0D95F0063C65F /* CharactersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BCED2FB0D95F0063C65F /* CharactersViewController.swift */; };
+		8158BCF02FB1B2500063C65F /* PotionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BCEF2FB1B2500063C65F /* PotionsViewController.swift */; };
+		8158BCF22FB1B2650063C65F /* SpellsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BCF12FB1B2650063C65F /* SpellsViewController.swift */; };
+		8158BE812FB1E4BE0063C65F /* BooksResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BE802FB1E4BE0063C65F /* BooksResponse.swift */; };
+		8158BE832FB1E7970063C65F /* MetaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BE822FB1E7970063C65F /* MetaModel.swift */; };
+		8158BE872FB1E8500063C65F /* MoviesResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BE862FB1E8500063C65F /* MoviesResponse.swift */; };
+		8158BE892FB1E9E80063C65F /* Endpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BE882FB1E9E80063C65F /* Endpoint.swift */; };
+		8158BE8B2FB1EA7A0063C65F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BE8A2FB1EA7A0063C65F /* Constants.swift */; };
+		8158BFD12FB1EDCC0063C65F /* PotterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BFD02FB1EDCC0063C65F /* PotterService.swift */; };
+		8158BFD32FB1EECA0063C65F /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BFD22FB1EECA0063C65F /* NetworkError.swift */; };
+		8158BFD52FB1F5980063C65F /* BooksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8158BFD42FB1F5980063C65F /* BooksViewModel.swift */; };
+		8185027C2FB97418008FE328 /* WikiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8185027B2FB97418008FE328 /* WikiCell.swift */; };
+		8185027E2FBADE1E008FE328 /* CacheManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8185027D2FBADE1E008FE328 /* CacheManger.swift */; };
+		8195B6E12FB41B60003C50F3 /* MoviesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8195B6E02FB41B60003C50F3 /* MoviesViewModel.swift */; };
+		8195B6E72FB420D5003C50F3 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 8195B6E62FB420D5003C50F3 /* Kingfisher */; };
+		81BF80B22FBDF0B60018A032 /* PotionsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80B12FBDF0B60018A032 /* PotionsResponse.swift */; };
+		81BF80B42FBDF21B0018A032 /* PotionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80B32FBDF21B0018A032 /* PotionsViewModel.swift */; };
+		81BF80B62FBDF5100018A032 /* PotionDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80B52FBDF5100018A032 /* PotionDetailViewController.swift */; };
+		81BF80B92FBDF66C0018A032 /* PotionInformationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80B82FBDF66C0018A032 /* PotionInformationSectionView.swift */; };
+		81BF80BB2FBEAD610018A032 /* SpellsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80BA2FBEAD610018A032 /* SpellsViewModel.swift */; };
+		81BF80BD2FBEADA00018A032 /* SpellsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80BC2FBEADA00018A032 /* SpellsResponse.swift */; };
+		81BF80BF2FBEB0890018A032 /* SpellDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80BE2FBEB0890018A032 /* SpellDetailViewController.swift */; };
+		81BF80C22FBEB1AA0018A032 /* SpellInformationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80C02FBEB1AA0018A032 /* SpellInformationSectionView.swift */; };
+		81BF80C42FBEEE210018A032 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80C32FBEEE210018A032 /* AlertManager.swift */; };
+		81BF80C62FBEF3570018A032 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF80C52FBEF3570018A032 /* NetworkMonitor.swift */; };
+		81BF823E2FC02C6F0018A032 /* AppDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF823D2FC02C6F0018A032 /* AppDependencies.swift */; };
+		81BF82442FC062330018A032 /* PotterServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF82432FC062330018A032 /* PotterServiceProtocol.swift */; };
+		81BF82462FC0627B0018A032 /* MockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF82452FC0627B0018A032 /* MockService.swift */; };
+		81C51A292FB5A7FE00040F07 /* ChaptersSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81C51A282FB5A7FE00040F07 /* ChaptersSectionView.swift */; };
+		81D0959F2FB8BC56008F189C /* CharactersResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D0959E2FB8BC56008F189C /* CharactersResponse.swift */; };
+		81D095A12FB8BD08008F189C /* ChaptersResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D095A02FB8BD08008F189C /* ChaptersResponse.swift */; };
+		81D095A32FB8BD5B008F189C /* CharactersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D095A22FB8BD5B008F189C /* CharactersViewModel.swift */; };
+		81D7A26B2FB5DAEE00309BF6 /* ChaptersRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7A26A2FB5DAEE00309BF6 /* ChaptersRowView.swift */; };
+		81D7A2702FB5E3BC00309BF6 /* ChapterDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81D7A26F2FB5E3BC00309BF6 /* ChapterDetailSheet.swift */; };
+		81DA4E8A2FBD6BDC00BF8C82 /* CharacterDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DA4E892FBD6BDC00BF8C82 /* CharacterDetailViewController.swift */; };
+		81DA4E8E2FBD702600BF8C82 /* BiographySectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DA4E8D2FBD702600BF8C82 /* BiographySectionView.swift */; };
+		81DA4E902FBD775F00BF8C82 /* PhysicalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DA4E8F2FBD775F00BF8C82 /* PhysicalSectionView.swift */; };
+		81DA4E922FBD796300BF8C82 /* RelationshipSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DA4E912FBD796300BF8C82 /* RelationshipSectionView.swift */; };
+		81DA4E942FBD7B5600BF8C82 /* MagicalSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DA4E932FBD7B5600BF8C82 /* MagicalSectionView.swift */; };
+		81DA4E962FBD7C8000BF8C82 /* AffiliationSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81DA4E952FBD7C8000BF8C82 /* AffiliationSectionView.swift */; };
+		81E230A52FB85AAF00F87F07 /* AboutSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E230A42FB85AAF00F87F07 /* AboutSectionView.swift */; };
+		81E230A72FB85CEF00F87F07 /* AttributesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E230A62FB85CEF00F87F07 /* AttributesView.swift */; };
+		81E230A92FB86E6A00F87F07 /* StaffSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E230A82FB86E6A00F87F07 /* StaffSectionView.swift */; };
+		81E230AB2FB871D900F87F07 /* LinksSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E230AA2FB871D900F87F07 /* LinksSectionView.swift */; };
+		81E230AD2FB8733C00F87F07 /* LinkAttributesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E230AC2FB8733C00F87F07 /* LinkAttributesView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		810324F32FACCB58008E3152 /* GridCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridCell.swift; sourceTree = "<group>"; };
+		81032B5E2FB05A19008E3152 /* AppButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppButton.swift; sourceTree = "<group>"; };
+		811635B42FA90BAF00099D36 /* PotterWiki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PotterWiki.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		811635CC2FA90BFB00099D36 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		811635CD2FA90BFB00099D36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		811635CE2FA90BFB00099D36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		811635CF2FA90BFB00099D36 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		811635D12FA90BFB00099D36 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		811635DC2FA90C2100099D36 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		811635DD2FA90C2100099D36 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		811635DE2FA90C2100099D36 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		811635E32FA90C2B00099D36 /* BooksCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksCoordinator.swift; sourceTree = "<group>"; };
+		811635E42FA90C2B00099D36 /* BooksViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksViewController.swift; sourceTree = "<group>"; };
+		811635E52FA90C2B00099D36 /* BookDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookDetailViewController.swift; sourceTree = "<group>"; };
+		811635E72FA90C2B00099D36 /* MoviesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesCoordinator.swift; sourceTree = "<group>"; };
+		811635E82FA90C2B00099D36 /* MoviesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewController.swift; sourceTree = "<group>"; };
+		811635E92FA90C2B00099D36 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
+		811635EB2FA90C2B00099D36 /* WikiCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiCoordinator.swift; sourceTree = "<group>"; };
+		811635EC2FA90C2B00099D36 /* WikiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiViewController.swift; sourceTree = "<group>"; };
+		814B9D122FB4C82A005FC6E4 /* SummarySectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummarySectionView.swift; sourceTree = "<group>"; };
+		8158BCED2FB0D95F0063C65F /* CharactersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewController.swift; sourceTree = "<group>"; };
+		8158BCEF2FB1B2500063C65F /* PotionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotionsViewController.swift; sourceTree = "<group>"; };
+		8158BCF12FB1B2650063C65F /* SpellsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsViewController.swift; sourceTree = "<group>"; };
+		8158BE802FB1E4BE0063C65F /* BooksResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksResponse.swift; sourceTree = "<group>"; };
+		8158BE822FB1E7970063C65F /* MetaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaModel.swift; sourceTree = "<group>"; };
+		8158BE862FB1E8500063C65F /* MoviesResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesResponse.swift; sourceTree = "<group>"; };
+		8158BE882FB1E9E80063C65F /* Endpoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoint.swift; sourceTree = "<group>"; };
+		8158BE8A2FB1EA7A0063C65F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8158BFD02FB1EDCC0063C65F /* PotterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotterService.swift; sourceTree = "<group>"; };
+		8158BFD22FB1EECA0063C65F /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		8158BFD42FB1F5980063C65F /* BooksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksViewModel.swift; sourceTree = "<group>"; };
+		8185027B2FB97418008FE328 /* WikiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiCell.swift; sourceTree = "<group>"; };
+		8185027D2FBADE1E008FE328 /* CacheManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManger.swift; sourceTree = "<group>"; };
+		8195B6E02FB41B60003C50F3 /* MoviesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesViewModel.swift; sourceTree = "<group>"; };
+		81BF80B12FBDF0B60018A032 /* PotionsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotionsResponse.swift; sourceTree = "<group>"; };
+		81BF80B32FBDF21B0018A032 /* PotionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotionsViewModel.swift; sourceTree = "<group>"; };
+		81BF80B52FBDF5100018A032 /* PotionDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotionDetailViewController.swift; sourceTree = "<group>"; };
+		81BF80B82FBDF66C0018A032 /* PotionInformationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotionInformationSectionView.swift; sourceTree = "<group>"; };
+		81BF80BA2FBEAD610018A032 /* SpellsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsViewModel.swift; sourceTree = "<group>"; };
+		81BF80BC2FBEADA00018A032 /* SpellsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellsResponse.swift; sourceTree = "<group>"; };
+		81BF80BE2FBEB0890018A032 /* SpellDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellDetailViewController.swift; sourceTree = "<group>"; };
+		81BF80C02FBEB1AA0018A032 /* SpellInformationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellInformationSectionView.swift; sourceTree = "<group>"; };
+		81BF80C32FBEEE210018A032 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		81BF80C52FBEF3570018A032 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		81BF823D2FC02C6F0018A032 /* AppDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencies.swift; sourceTree = "<group>"; };
+		81BF82432FC062330018A032 /* PotterServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PotterServiceProtocol.swift; sourceTree = "<group>"; };
+		81BF82452FC0627B0018A032 /* MockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockService.swift; sourceTree = "<group>"; };
+		81C51A282FB5A7FE00040F07 /* ChaptersSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaptersSectionView.swift; sourceTree = "<group>"; };
+		81D0959E2FB8BC56008F189C /* CharactersResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersResponse.swift; sourceTree = "<group>"; };
+		81D095A02FB8BD08008F189C /* ChaptersResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaptersResponse.swift; sourceTree = "<group>"; };
+		81D095A22FB8BD5B008F189C /* CharactersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersViewModel.swift; sourceTree = "<group>"; };
+		81D7A26A2FB5DAEE00309BF6 /* ChaptersRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChaptersRowView.swift; sourceTree = "<group>"; };
+		81D7A26F2FB5E3BC00309BF6 /* ChapterDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterDetailSheet.swift; sourceTree = "<group>"; };
+		81DA4E892FBD6BDC00BF8C82 /* CharacterDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewController.swift; sourceTree = "<group>"; };
+		81DA4E8D2FBD702600BF8C82 /* BiographySectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiographySectionView.swift; sourceTree = "<group>"; };
+		81DA4E8F2FBD775F00BF8C82 /* PhysicalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicalSectionView.swift; sourceTree = "<group>"; };
+		81DA4E912FBD796300BF8C82 /* RelationshipSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipSectionView.swift; sourceTree = "<group>"; };
+		81DA4E932FBD7B5600BF8C82 /* MagicalSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MagicalSectionView.swift; sourceTree = "<group>"; };
+		81DA4E952FBD7C8000BF8C82 /* AffiliationSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliationSectionView.swift; sourceTree = "<group>"; };
+		81E230A42FB85AAF00F87F07 /* AboutSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSectionView.swift; sourceTree = "<group>"; };
+		81E230A62FB85CEF00F87F07 /* AttributesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributesView.swift; sourceTree = "<group>"; };
+		81E230A82FB86E6A00F87F07 /* StaffSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSectionView.swift; sourceTree = "<group>"; };
+		81E230AA2FB871D900F87F07 /* LinksSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinksSectionView.swift; sourceTree = "<group>"; };
+		81E230AC2FB8733C00F87F07 /* LinkAttributesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkAttributesView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		811635B12FA90BAF00099D36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8195B6E72FB420D5003C50F3 /* Kingfisher in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		810324F22FACCB3D008E3152 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				810324F32FACCB58008E3152 /* GridCell.swift */,
+				8185027B2FB97418008FE328 /* WikiCell.swift */,
+				81032B5E2FB05A19008E3152 /* AppButton.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		81032B582FB053A1008E3152 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				8158BE8A2FB1EA7A0063C65F /* Constants.swift */,
+				8185027D2FBADE1E008FE328 /* CacheManger.swift */,
+				81BF80C32FBEEE210018A032 /* AlertManager.swift */,
+				81BF80C52FBEF3570018A032 /* NetworkMonitor.swift */,
+				81BF823D2FC02C6F0018A032 /* AppDependencies.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		811635AB2FA90BAF00099D36 = {
+			isa = PBXGroup;
+			children = (
+				811635D32FA90BFB00099D36 /* PotterWiki */,
+				811635B52FA90BAF00099D36 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		811635B52FA90BAF00099D36 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				811635B42FA90BAF00099D36 /* PotterWiki.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		811635D32FA90BFB00099D36 /* PotterWiki */ = {
+			isa = PBXGroup;
+			children = (
+				811635DA2FA90C0F00099D36 /* App */,
+				8117CDB12FAB29F4000E9C7C /* Models */,
+				8158BE7E2FB1E4AE0063C65F /* Networking */,
+				81032B582FB053A1008E3152 /* Helpers */,
+				811635D02FA90BFB00099D36 /* LaunchScreen.storyboard */,
+				811635CD2FA90BFB00099D36 /* Assets.xcassets */,
+				811635CE2FA90BFB00099D36 /* Info.plist */,
+			);
+			path = PotterWiki;
+			sourceTree = "<group>";
+		};
+		811635DA2FA90C0F00099D36 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				811635CC2FA90BFB00099D36 /* AppDelegate.swift */,
+				811635D12FA90BFB00099D36 /* SceneDelegate.swift */,
+				8195B6E22FB41EB6003C50F3 /* ViewControllers */,
+				8195B6E32FB41EC6003C50F3 /* ViewModels */,
+				8195B6E42FB41EE1003C50F3 /* Coordinators */,
+				810324F22FACCB3D008E3152 /* Components */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		8117CDB12FAB29F4000E9C7C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				8158BE7F2FB1E4B60063C65F /* Responses */,
+				8158BE822FB1E7970063C65F /* MetaModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8158BE7E2FB1E4AE0063C65F /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				81BF82472FC066730018A032 /* Services */,
+				81BF82422FC061980018A032 /* Protocols */,
+				8158BE882FB1E9E80063C65F /* Endpoint.swift */,
+				8158BFD22FB1EECA0063C65F /* NetworkError.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		8158BE7F2FB1E4B60063C65F /* Responses */ = {
+			isa = PBXGroup;
+			children = (
+				8158BE802FB1E4BE0063C65F /* BooksResponse.swift */,
+				8158BE862FB1E8500063C65F /* MoviesResponse.swift */,
+				81D095A02FB8BD08008F189C /* ChaptersResponse.swift */,
+				81D0959E2FB8BC56008F189C /* CharactersResponse.swift */,
+				81BF80B12FBDF0B60018A032 /* PotionsResponse.swift */,
+				81BF80BC2FBEADA00018A032 /* SpellsResponse.swift */,
+			);
+			path = Responses;
+			sourceTree = "<group>";
+		};
+		8195B6E22FB41EB6003C50F3 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				81D7A26C2FB5E34800309BF6 /* Books */,
+				81D7A26D2FB5E35200309BF6 /* Movies */,
+				81D7A26E2FB5E35900309BF6 /* Wiki */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		8195B6E32FB41EC6003C50F3 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				8158BFD42FB1F5980063C65F /* BooksViewModel.swift */,
+				8195B6E02FB41B60003C50F3 /* MoviesViewModel.swift */,
+				81D095A22FB8BD5B008F189C /* CharactersViewModel.swift */,
+				81BF80B32FBDF21B0018A032 /* PotionsViewModel.swift */,
+				81BF80BA2FBEAD610018A032 /* SpellsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		8195B6E42FB41EE1003C50F3 /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				811635DD2FA90C2100099D36 /* AppCoordinator.swift */,
+				811635DE2FA90C2100099D36 /* MainCoordinator.swift */,
+				811635E32FA90C2B00099D36 /* BooksCoordinator.swift */,
+				811635E72FA90C2B00099D36 /* MoviesCoordinator.swift */,
+				811635EB2FA90C2B00099D36 /* WikiCoordinator.swift */,
+				81BF823F2FC035BA0018A032 /* Protocols */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		81BF80B72FBDF6540018A032 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				81BF80B82FBDF66C0018A032 /* PotionInformationSectionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		81BF80C12FBEB1AA0018A032 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				81BF80C02FBEB1AA0018A032 /* SpellInformationSectionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		81BF823F2FC035BA0018A032 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				811635DC2FA90C2100099D36 /* Coordinator.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		81BF82422FC061980018A032 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				81BF82432FC062330018A032 /* PotterServiceProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		81BF82472FC066730018A032 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				8158BFD02FB1EDCC0063C65F /* PotterService.swift */,
+				81BF82452FC0627B0018A032 /* MockService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		81D0959D2FB8BB1D008F189C /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				81D7A26F2FB5E3BC00309BF6 /* ChapterDetailSheet.swift */,
+			);
+			path = Sheets;
+			sourceTree = "<group>";
+		};
+		81D7A26C2FB5E34800309BF6 /* Books */ = {
+			isa = PBXGroup;
+			children = (
+				811635E42FA90C2B00099D36 /* BooksViewController.swift */,
+				811635E52FA90C2B00099D36 /* BookDetailViewController.swift */,
+				81D7A2722FB5EC1300309BF6 /* Views */,
+				81D0959D2FB8BB1D008F189C /* Sheets */,
+			);
+			path = Books;
+			sourceTree = "<group>";
+		};
+		81D7A26D2FB5E35200309BF6 /* Movies */ = {
+			isa = PBXGroup;
+			children = (
+				811635E82FA90C2B00099D36 /* MoviesViewController.swift */,
+				811635E92FA90C2B00099D36 /* MovieDetailViewController.swift */,
+				81E230A32FB85A9700F87F07 /* Views */,
+			);
+			path = Movies;
+			sourceTree = "<group>";
+		};
+		81D7A26E2FB5E35900309BF6 /* Wiki */ = {
+			isa = PBXGroup;
+			children = (
+				811635EC2FA90C2B00099D36 /* WikiViewController.swift */,
+				81DA4E8B2FBD700B00BF8C82 /* Characters */,
+				81DA4E972FBDD80800BF8C82 /* Potions */,
+				81DA4E982FBDD81500BF8C82 /* Spells */,
+			);
+			path = Wiki;
+			sourceTree = "<group>";
+		};
+		81D7A2722FB5EC1300309BF6 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				814B9D122FB4C82A005FC6E4 /* SummarySectionView.swift */,
+				81C51A282FB5A7FE00040F07 /* ChaptersSectionView.swift */,
+				81D7A26A2FB5DAEE00309BF6 /* ChaptersRowView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		81DA4E8B2FBD700B00BF8C82 /* Characters */ = {
+			isa = PBXGroup;
+			children = (
+				8158BCED2FB0D95F0063C65F /* CharactersViewController.swift */,
+				81DA4E892FBD6BDC00BF8C82 /* CharacterDetailViewController.swift */,
+				81DA4E8C2FBD701500BF8C82 /* Views */,
+			);
+			path = Characters;
+			sourceTree = "<group>";
+		};
+		81DA4E8C2FBD701500BF8C82 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				81DA4E8D2FBD702600BF8C82 /* BiographySectionView.swift */,
+				81DA4E8F2FBD775F00BF8C82 /* PhysicalSectionView.swift */,
+				81DA4E912FBD796300BF8C82 /* RelationshipSectionView.swift */,
+				81DA4E932FBD7B5600BF8C82 /* MagicalSectionView.swift */,
+				81DA4E952FBD7C8000BF8C82 /* AffiliationSectionView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		81DA4E972FBDD80800BF8C82 /* Potions */ = {
+			isa = PBXGroup;
+			children = (
+				8158BCEF2FB1B2500063C65F /* PotionsViewController.swift */,
+				81BF80B52FBDF5100018A032 /* PotionDetailViewController.swift */,
+				81BF80B72FBDF6540018A032 /* Views */,
+			);
+			path = Potions;
+			sourceTree = "<group>";
+		};
+		81DA4E982FBDD81500BF8C82 /* Spells */ = {
+			isa = PBXGroup;
+			children = (
+				8158BCF12FB1B2650063C65F /* SpellsViewController.swift */,
+				81BF80BE2FBEB0890018A032 /* SpellDetailViewController.swift */,
+				81BF80C12FBEB1AA0018A032 /* Views */,
+			);
+			path = Spells;
+			sourceTree = "<group>";
+		};
+		81E230A32FB85A9700F87F07 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				81E230A42FB85AAF00F87F07 /* AboutSectionView.swift */,
+				81E230A82FB86E6A00F87F07 /* StaffSectionView.swift */,
+				81E230AA2FB871D900F87F07 /* LinksSectionView.swift */,
+				81E230A62FB85CEF00F87F07 /* AttributesView.swift */,
+				81E230AC2FB8733C00F87F07 /* LinkAttributesView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		811635B32FA90BAF00099D36 /* PotterWiki */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 811635C72FA90BB000099D36 /* Build configuration list for PBXNativeTarget "PotterWiki" */;
+			buildPhases = (
+				811635B02FA90BAF00099D36 /* Sources */,
+				811635B12FA90BAF00099D36 /* Frameworks */,
+				811635B22FA90BAF00099D36 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PotterWiki;
+			packageProductDependencies = (
+				8195B6E62FB420D5003C50F3 /* Kingfisher */,
+			);
+			productName = PotterWiki;
+			productReference = 811635B42FA90BAF00099D36 /* PotterWiki.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		811635AC2FA90BAF00099D36 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					811635B32FA90BAF00099D36 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+				};
+			};
+			buildConfigurationList = 811635AF2FA90BAF00099D36 /* Build configuration list for PBXProject "PotterWiki" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 811635AB2FA90BAF00099D36;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8195B6E52FB420D5003C50F3 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 811635B52FA90BAF00099D36 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				811635B32FA90BAF00099D36 /* PotterWiki */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		811635B22FA90BAF00099D36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				811635D42FA90BFB00099D36 /* Assets.xcassets in Resources */,
+				811635D62FA90BFB00099D36 /* LaunchScreen.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		811635B02FA90BAF00099D36 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				81E230A92FB86E6A00F87F07 /* StaffSectionView.swift in Sources */,
+				81BF80B22FBDF0B60018A032 /* PotionsResponse.swift in Sources */,
+				8158BFD12FB1EDCC0063C65F /* PotterService.swift in Sources */,
+				811635D72FA90BFB00099D36 /* AppDelegate.swift in Sources */,
+				811635E02FA90C2100099D36 /* AppCoordinator.swift in Sources */,
+				814B9D132FB4C82A005FC6E4 /* SummarySectionView.swift in Sources */,
+				81BF80B42FBDF21B0018A032 /* PotionsViewModel.swift in Sources */,
+				811635E12FA90C2100099D36 /* Coordinator.swift in Sources */,
+				81BF823E2FC02C6F0018A032 /* AppDependencies.swift in Sources */,
+				8158BFD52FB1F5980063C65F /* BooksViewModel.swift in Sources */,
+				8158BE892FB1E9E80063C65F /* Endpoint.swift in Sources */,
+				81BF82462FC0627B0018A032 /* MockService.swift in Sources */,
+				81E230A52FB85AAF00F87F07 /* AboutSectionView.swift in Sources */,
+				81BF80C22FBEB1AA0018A032 /* SpellInformationSectionView.swift in Sources */,
+				810324F42FACCB58008E3152 /* GridCell.swift in Sources */,
+				81BF80BD2FBEADA00018A032 /* SpellsResponse.swift in Sources */,
+				81D0959F2FB8BC56008F189C /* CharactersResponse.swift in Sources */,
+				81DA4E8E2FBD702600BF8C82 /* BiographySectionView.swift in Sources */,
+				8158BE832FB1E7970063C65F /* MetaModel.swift in Sources */,
+				81D7A2702FB5E3BC00309BF6 /* ChapterDetailSheet.swift in Sources */,
+				811635E22FA90C2100099D36 /* MainCoordinator.swift in Sources */,
+				81BF80BF2FBEB0890018A032 /* SpellDetailViewController.swift in Sources */,
+				8158BE8B2FB1EA7A0063C65F /* Constants.swift in Sources */,
+				811635D82FA90BFB00099D36 /* SceneDelegate.swift in Sources */,
+				81032B5F2FB05A19008E3152 /* AppButton.swift in Sources */,
+				81D095A32FB8BD5B008F189C /* CharactersViewModel.swift in Sources */,
+				811635EE2FA90C2B00099D36 /* BooksViewController.swift in Sources */,
+				81BF80B62FBDF5100018A032 /* PotionDetailViewController.swift in Sources */,
+				81DA4E962FBD7C8000BF8C82 /* AffiliationSectionView.swift in Sources */,
+				811635EF2FA90C2B00099D36 /* BooksCoordinator.swift in Sources */,
+				81DA4E942FBD7B5600BF8C82 /* MagicalSectionView.swift in Sources */,
+				811635F02FA90C2B00099D36 /* MovieDetailViewController.swift in Sources */,
+				8158BE872FB1E8500063C65F /* MoviesResponse.swift in Sources */,
+				811635F12FA90C2B00099D36 /* MoviesCoordinator.swift in Sources */,
+				811635F22FA90C2B00099D36 /* BookDetailViewController.swift in Sources */,
+				81E230A72FB85CEF00F87F07 /* AttributesView.swift in Sources */,
+				81D095A12FB8BD08008F189C /* ChaptersResponse.swift in Sources */,
+				81DA4E902FBD775F00BF8C82 /* PhysicalSectionView.swift in Sources */,
+				8158BFD32FB1EECA0063C65F /* NetworkError.swift in Sources */,
+				81C51A292FB5A7FE00040F07 /* ChaptersSectionView.swift in Sources */,
+				81E230AB2FB871D900F87F07 /* LinksSectionView.swift in Sources */,
+				81E230AD2FB8733C00F87F07 /* LinkAttributesView.swift in Sources */,
+				81D7A26B2FB5DAEE00309BF6 /* ChaptersRowView.swift in Sources */,
+				8158BCEE2FB0D95F0063C65F /* CharactersViewController.swift in Sources */,
+				81BF80C62FBEF3570018A032 /* NetworkMonitor.swift in Sources */,
+				81DA4E922FBD796300BF8C82 /* RelationshipSectionView.swift in Sources */,
+				811635F32FA90C2B00099D36 /* MoviesViewController.swift in Sources */,
+				81BF82442FC062330018A032 /* PotterServiceProtocol.swift in Sources */,
+				8158BE812FB1E4BE0063C65F /* BooksResponse.swift in Sources */,
+				8185027C2FB97418008FE328 /* WikiCell.swift in Sources */,
+				81BF80C42FBEEE210018A032 /* AlertManager.swift in Sources */,
+				8158BCF22FB1B2650063C65F /* SpellsViewController.swift in Sources */,
+				81DA4E8A2FBD6BDC00BF8C82 /* CharacterDetailViewController.swift in Sources */,
+				8185027E2FBADE1E008FE328 /* CacheManger.swift in Sources */,
+				8158BCF02FB1B2500063C65F /* PotionsViewController.swift in Sources */,
+				8195B6E12FB41B60003C50F3 /* MoviesViewModel.swift in Sources */,
+				811635F42FA90C2B00099D36 /* WikiCoordinator.swift in Sources */,
+				81BF80B92FBDF66C0018A032 /* PotionInformationSectionView.swift in Sources */,
+				81BF80BB2FBEAD610018A032 /* SpellsViewModel.swift in Sources */,
+				811635F52FA90C2B00099D36 /* WikiViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		811635D02FA90BFB00099D36 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				811635CF2FA90BFB00099D36 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		811635C82FA90BB000099D36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS68HMX5XZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PotterWiki/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Potter Wiki";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.langundi.PotterWiki;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		811635C92FA90BB000099D36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LS68HMX5XZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = PotterWiki/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Potter Wiki";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.entertainment";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.langundi.PotterWiki;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		811635CA2FA90BB000099D36 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LS68HMX5XZ;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		811635CB2FA90BB000099D36 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LS68HMX5XZ;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		811635AF2FA90BAF00099D36 /* Build configuration list for PBXProject "PotterWiki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				811635CA2FA90BB000099D36 /* Debug */,
+				811635CB2FA90BB000099D36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		811635C72FA90BB000099D36 /* Build configuration list for PBXNativeTarget "PotterWiki" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				811635C82FA90BB000099D36 /* Debug */,
+				811635C92FA90BB000099D36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8195B6E52FB420D5003C50F3 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.9.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8195B6E62FB420D5003C50F3 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8195B6E52FB420D5003C50F3 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 811635AC2FA90BAF00099D36 /* Project object */;
+}
