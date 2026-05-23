@@ -37,7 +37,7 @@ class WikiViewController: UIViewController {
     private let potionsButton = AppButton(style: .primary, title: "Potions", icon: "flask.fill")
     private let spellsButton = AppButton(style: .primary, title: "Spells", icon: "wand.and.sparkles.inverse")
     
-    private let potterDB: UILabel = {
+    private let dataProvider: UILabel = {
         let label = UILabel()
         label.textColor = .label
         label.textAlignment = .center
@@ -47,11 +47,17 @@ class WikiViewController: UIViewController {
         return label
     }()
     
-    private let link: UITextView = {
-        let url = URL(string: "https://potterdb.com/")
-        let attributedString = NSMutableAttributedString(string: "PotterDB")
+    private let potterDB: UITextView = {
+        let symbol = NSTextAttachment()
+        symbol.image = UIImage(
+            systemName: "link",
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 16))?
+            .withTintColor(.systemBlue)
+        
+        let attributedString = NSMutableAttributedString()
+        attributedString.append(NSAttributedString(attachment: symbol))
+        attributedString.append(NSAttributedString(string: " PotterDB"))
         attributedString.addAttributes([
-            .link: url!,
             .font: UIFont.systemFont(ofSize: 16, weight: .regular),
             .foregroundColor: UIColor.systemBlue
         ], range: NSRange(location: 0, length: attributedString.length))
@@ -59,7 +65,6 @@ class WikiViewController: UIViewController {
         let textView = UITextView()
         textView.attributedText = attributedString
         textView.isEditable = false
-        textView.isSelectable = true
         textView.isScrollEnabled = false
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
@@ -106,8 +111,8 @@ class WikiViewController: UIViewController {
     private func setupUI() {
         view.addSubview(scrollView)
         scrollView.addSubview(vStack)
+        scrollView.addSubview(dataProvider)
         scrollView.addSubview(potterDB)
-        scrollView.addSubview(link)
         scrollView.addSubview(clearCacheButton)
         
         NSLayoutConstraint.activate([
@@ -120,12 +125,12 @@ class WikiViewController: UIViewController {
             vStack.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor, constant: 16),
             vStack.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor, constant: -16),
             
-            potterDB.topAnchor.constraint(equalTo: vStack.bottomAnchor, constant: 250),
+            dataProvider.topAnchor.constraint(equalTo: vStack.bottomAnchor, constant: 250),
+            dataProvider.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
+            potterDB.topAnchor.constraint(equalTo: dataProvider.bottomAnchor, constant: 8),
             potterDB.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            link.topAnchor.constraint(equalTo: potterDB.bottomAnchor, constant: 8),
-            link.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             
-            clearCacheButton.topAnchor.constraint(equalTo: link.bottomAnchor, constant: 20),
+            clearCacheButton.topAnchor.constraint(equalTo: potterDB.bottomAnchor, constant: 20),
             clearCacheButton.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -16),
             clearCacheButton.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor)
         ])
@@ -159,6 +164,13 @@ class WikiViewController: UIViewController {
         clearCacheButton.addAction(UIAction { [weak self] _ in
             self?.cacheManager.clearAll()
         }, for: .touchUpInside)
+        
+        potterDB.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleLinkTap)))
+    }
+    
+    @objc private func handleLinkTap() {
+        guard let url = URL(string: "https://potterdb.com/") else { return }
+        UIApplication.shared.open(url)
     }
 }
 

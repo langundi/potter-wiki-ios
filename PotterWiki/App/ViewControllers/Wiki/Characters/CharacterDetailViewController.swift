@@ -61,14 +61,14 @@ class CharacterDetailViewController: UIViewController {
         let textView = UITextView()
         textView.isEditable = false
         textView.isScrollEnabled = false
-        textView.textColor = .systemBlue
-        textView.font = .systemFont(ofSize: 16, weight: .regular)
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.backgroundColor = .clear
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
+    
+    private var urlString: String = ""
     
     private let biographySection = BiographySectionView()
     
@@ -175,10 +175,13 @@ class CharacterDetailViewController: UIViewController {
             characterImage.heightAnchor.constraint(equalTo: characterImage.widthAnchor, multiplier: 1.5),
             name.widthAnchor.constraint(equalTo: headerVStack.widthAnchor, multiplier: 0.7),
         ])
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(handleLinkTap))
+        wikiLink.addGestureRecognizer(tap)
     }
     
     func configure(link: String, displayText: String) {
-        guard let url = URL(string: link) else { return }
+        self.urlString = link
         
         let symbol = NSTextAttachment()
         symbol.image = UIImage(
@@ -192,11 +195,16 @@ class CharacterDetailViewController: UIViewController {
         
         let fullText = NSRange(location: 0, length: attributed.length)
         attributed.addAttributes([
-            .link: url,
-            .font: UIFont.systemFont(ofSize: 16)
+            .font: UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.systemBlue
         ], range: fullText)
         
         self.wikiLink.attributedText = attributed
+    }
+    
+    @objc private func handleLinkTap() {
+        guard let url = URL(string: urlString) else { return }
+        UIApplication.shared.open(url)
     }
 }
 

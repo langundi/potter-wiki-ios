@@ -25,7 +25,7 @@ final class CacheManager {
     ///   - object: Cached value.
     ///   - key: Cache key.
     ///   - expiry: Cache expiry time.
-    func set<T: Codable>(_ object: T, forKey key: String, expiry: CacheExpiry = .hours(1)) {
+    func set<T: Codable>(_ object: T, forKey key: String, expiry: CacheExpiry = .days(7)) {
         queue.async(flags: .barrier) { [weak self] in
             guard let self = self else { return }
             let wrapper = CacheWrapper(data: object, timestamp: Date(), expiry: expiry.timeInterval)
@@ -36,7 +36,7 @@ final class CacheManager {
     }
     
     
-    /// Get cached object
+    /// Get cached object.
     /// - Parameter key: Cache key.
     /// - Returns: Value for cache key.
     func get<T: Codable>(forKey key: String) -> T? {

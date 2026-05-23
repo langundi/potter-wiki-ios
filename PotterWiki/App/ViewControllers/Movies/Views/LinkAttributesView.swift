@@ -24,8 +24,6 @@ class LinkAttributesView: UIView {
         let textView = UITextView()
         textView.isEditable = false
         textView.isScrollEnabled = false
-        textView.textColor = .systemBlue
-        textView.font = .systemFont(ofSize: 16, weight: .regular)
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
         textView.backgroundColor = .clear
