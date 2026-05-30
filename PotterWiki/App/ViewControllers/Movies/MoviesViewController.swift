@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class MoviesViewController: UIViewController {
     
@@ -13,10 +14,12 @@ class MoviesViewController: UIViewController {
     // MARK: - Variables
     weak var coordinator: MoviesCoordinator?
     private var vm: MoviesViewModel
+    private var cancellables = Set<AnyCancellable>()
 
     
     // MARK: - UI Components
-    /// Legacy way to implement `UICollectionView` using `UICollectionViewFlowLayout`.
+    private var dataSource: UICollectionViewDiffableDataSource<SectionEnum, MovieModel>!
+    
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: GridCell.itemWidth, height: GridCell.itemHeight)
@@ -56,15 +59,14 @@ class MoviesViewController: UIViewController {
         
         bindViewModel()
         setupUI()
+        setupDataSource()
         vm.fetchMovies()
     }
     
     
     // MARK: - UI Setup
     private func setupUI() {
-        collectionView.dataSource = self
         collectionView.delegate = self
-        
         view.addSubview(collectionView)
         view.addSubview(spinner)
         
@@ -79,24 +81,36 @@ class MoviesViewController: UIViewController {
         ])
     }
     
+    private func setupDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, movie in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GridCell.identifier, for: indexPath) as! GridCell
+            let imageURL = URL(string: movie.attributes.poster)
+            cell.configure(title: movie.attributes.title, imageURL: imageURL)
+            return cell
+        }
+    }
+    
     private func bindViewModel() {
-        vm.onLoading = { [weak self] isLoading in
-            DispatchQueue.main.async {
+        vm.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
                 isLoading ? self?.spinner.startAnimating() : self?.spinner.stopAnimating()
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onMoviesUpdated = { [weak self] in
-            DispatchQueue.main.async {
+        vm.$movies
+            .receive(on: DispatchQueue.main)
+            .sink{ [weak self] movies in
                 self?.contentUnavailableConfiguration = nil
-                self?.collectionView.reloadData()
+                self?.applySnapshot(movies: movies)
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onError = { [weak self] error in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
+        vm.$error
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] error in
+                guard let self = self else { return }
                 switch error {
                 case .noInternet:
                     if !self.vm.movies.isEmpty {
@@ -126,7 +140,14 @@ class MoviesViewController: UIViewController {
                     )
                 }
             }
-        }
+            .store(in: &cancellables)
+    }
+    
+    private func applySnapshot(movies: [MovieModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SectionEnum, MovieModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(movies, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func showErrorState(icon: String, title: String, message: String) {
@@ -149,23 +170,10 @@ class MoviesViewController: UIViewController {
 
 
 // MARK: - Collection View Delegate
-extension MoviesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        vm.movies.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GridCell.identifier, for: indexPath) as! GridCell
-        let movie = vm.movies[indexPath.item]
-        
-        let imageURL = URL(string: movie.attributes.poster)
-        cell.configure(title: movie.attributes.title, imageURL: imageURL)
-        return cell
-    }
-    
+extension MoviesViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let movie = dataSource.itemIdentifier(for: indexPath) else { return }
         let cell = collectionView.cellForItem(at: indexPath)
-        let movie = vm.movies[indexPath.row]
         coordinator?.showMovieDetail(movie: movie, sourceView: cell)
     }
 }

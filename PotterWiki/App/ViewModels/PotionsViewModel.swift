@@ -6,27 +6,26 @@
 //
 
 import Foundation
+import Combine
 
 final class PotionsViewModel {
     
-    var onPotionsUpdated: (() -> Void)?
-    var onLoading: ((Bool) -> Void)?
-    var onError: ((NetworkError) -> Void)?
+    // Published
+    @Published private(set) var currentPotions: [PotionModel] = []
+    @Published private(set) var isLoading: Bool = false
+    @Published private(set) var error: NetworkError? = nil
     
+    // Pagination
     private(set) var pagination: PaginationModel?
-    
-    // Pagination with an array, contains 100 items each.
     private(set) var currentPageIndex: Int = 0
     private(set) var potionsPages: [[PotionModel]] = []
     
-    // Returns current index array or search result
-    var currentPotions: [PotionModel] {
-        if isSearching {
-            return searchResults
-        }
-        guard !potionsPages.isEmpty else { return [] }
-        return potionsPages[currentPageIndex]
-    }
+    // Search
+    let searchQuery = CurrentValueSubject<String, Never>("")
+    private var cancellables = Set<AnyCancellable>()
+    
+    // Computed Properties
+    var isSearching: Bool { !searchQuery.value.isEmpty }
     
     var canGoNext: Bool {
         currentPageIndex < potionsPages.count - 1 || pagination?.next != nil
@@ -36,18 +35,31 @@ final class PotionsViewModel {
         currentPageIndex > 0
     }
     
-    private(set) var isSearching: Bool = false
-    private(set) var searchResults: [PotionModel] = []
-    private var searchTask: DispatchWorkItem?
-    
+    // Dependencies
     private let potterService: PotterServiceProtocol
     private let cacheManager: CacheManager
     
     init(potterService: PotterServiceProtocol, cacheManager: CacheManager) {
         self.potterService = potterService
         self.cacheManager = cacheManager
+        
+        bindSearch()
     }
     
+    private func bindSearch() {
+        searchQuery
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.global())
+            .removeDuplicates()
+            .sink { [weak self] query in
+                guard let self = self else { return }
+                if query.isEmpty {
+                    self.currentPotions = self.currentPotions.isEmpty ? [] : self.potionsPages[self.currentPageIndex]
+                } else {
+                    fetchSearchResults(query: query)
+                }
+            }
+            .store(in: &cancellables)
+    }
     
     /// Fetch potions and caches the result.
     func fetchPotions() {
@@ -57,80 +69,53 @@ final class PotionsViewModel {
         let potionsCache = "potions_page_\(pageToFetch)"
         let paginationCache = "potions_pagination_\(pageToFetch)"
         
-        onLoading?(true)
+        isLoading = true
         
-        if let potionsCache: [PotionModel] = cacheManager.get(forKey: potionsCache),
-           let paginationCache: PaginationModel = cacheManager.get(forKey: paginationCache) {
-            self.potionsPages.append(potionsCache)
-            self.currentPageIndex = self.potionsPages.count - 1
-            self.pagination = paginationCache
-            self.onPotionsUpdated?()
-            self.onLoading?(false)
+        if let cachedPotions: [PotionModel] = cacheManager.get(forKey: potionsCache),
+            let cachedPagination: PaginationModel = cacheManager.get(forKey: paginationCache) {
+            potionsPages.append(cachedPotions)
+            currentPageIndex = potionsPages.count - 1
+            pagination = cachedPagination
+            currentPotions = cachedPotions
+            isLoading = false
             return
         }
         
         potterService.getPotions(page: String(pageToFetch)) { [weak self] result in
             guard let self = self else { return }
-            
-            onLoading?(false)
+            isLoading = false
             
             switch result {
             case .success(let response):
                 self.potionsPages.append(response.data)
                 self.currentPageIndex = self.potionsPages.count - 1
                 self.pagination = response.meta.pagination
-                
-                self.onPotionsUpdated?()
+                self.currentPotions = response.data
                 
                 cacheManager.set(self.potionsPages[currentPageIndex], forKey: potionsCache)
                 cacheManager.set(self.pagination, forKey: paginationCache)
             case .failure(let error):
-                self.onError?(error)
+                self.error = error
             }
         }
-    }
-    
-    
-    /// Search potions by name. Fires `fetchSearchResult` function.
-    /// - Parameter query: Potion name.
-    func search(query: String) {
-        searchTask?.cancel()
-        
-        guard !query.isEmpty else {
-            isSearching = false
-            searchResults = []
-            onPotionsUpdated?()
-            return
-        }
-        
-        isSearching = true
-        
-        let task = DispatchWorkItem { [weak self] in
-            self?.fetchSearchResults(query: query)
-        }
-        
-        searchTask = task
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5, execute: task)
     }
     
     
     /// Fetch potions by name.
     /// - Parameter query: Potion name.
     private func fetchSearchResults(query: String) {
-        onLoading?(true)
+        isLoading = true
         
         potterService.getPotionsByName(name: query) { [weak self] result in
             guard let self = self else { return }
-            
-            self.onLoading?(false)
+            isLoading = false
             
             switch result {
             case .success(let response):
-                self.searchResults = response.data
-                self.onPotionsUpdated?()
+                self.currentPotions = response.data
             case .failure(let error):
-                self.onError?(error)
-                onPotionsUpdated?()
+                self.error = error
+                self.currentPotions = []
             }
         }
     }
@@ -141,7 +126,7 @@ final class PotionsViewModel {
         guard !isSearching else { return }
         if currentPageIndex < potionsPages.count - 1 {
             currentPageIndex += 1
-            onPotionsUpdated?()
+            currentPotions = potionsPages[currentPageIndex]
         } else {
             fetchPotions()
         }
@@ -152,7 +137,7 @@ final class PotionsViewModel {
     func prevPage() {
         guard canGoPrev else { return }
         currentPageIndex -= 1
-        onPotionsUpdated?()
+        currentPotions = potionsPages[currentPageIndex]
     }
     
     
@@ -161,5 +146,6 @@ final class PotionsViewModel {
         potionsPages = []
         pagination = nil
         currentPageIndex = 0
+        currentPotions = []
     }
 }

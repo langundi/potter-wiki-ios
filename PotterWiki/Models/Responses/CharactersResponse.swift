@@ -12,12 +12,12 @@ struct CharactersResponse: Codable {
     let meta: MetaModel
 }
 
-struct CharacterModel: Identifiable, Codable, Hashable {
+struct CharacterModel: Identifiable, Codable, nonisolated Hashable, Sendable {
     let id: String
     let attributes: CharacterAttributes
 }
 
-struct CharacterAttributes: Codable, Hashable {
+struct CharacterAttributes: Codable, nonisolated Hashable {
     let slug: String?
     let aliasNames: [String]?
     let animagus: String?

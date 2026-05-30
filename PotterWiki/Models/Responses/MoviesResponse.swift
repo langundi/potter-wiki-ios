@@ -12,12 +12,12 @@ struct MoviesResponse: Codable {
     let meta: MetaModel
 }
 
-struct MovieModel: Identifiable, Codable, Hashable {
+struct MovieModel: Identifiable, Codable, nonisolated Hashable {
     let id: String
     let attributes: MovieAttributes
 }
 
-struct MovieAttributes: Codable, Hashable {
+struct MovieAttributes: Codable, nonisolated Hashable {
     let boxOffice: String
     let budget: String
     let cinematographers: [String]

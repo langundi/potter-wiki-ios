@@ -6,25 +6,14 @@
 //
 
 import Foundation
+import Combine
 
 final class BooksViewModel {
     
-    var onLoading: ((Bool) -> Void)?
-    var onBooksUpdated: (() -> Void)?
-    var onChaptersUpdated: (() -> Void)?
-    var onError: ((NetworkError) -> Void)?
-    
-    private(set) var books: [BookModel] = [] {
-        didSet {
-            self.onBooksUpdated?()
-        }
-    }
-    
-    private(set) var chapters: [ChapterModel] = [] {
-        didSet {
-            self.onChaptersUpdated?()
-        }
-    }
+    @Published private(set) var books: [BookModel] = []
+    @Published private(set) var chapters: [ChapterModel] = []
+    @Published private(set) var isLoading: Bool = false
+    @Published private(set) var error: NetworkError? = nil
     
     private let potterService: PotterServiceProtocol
     private let cacheManager: CacheManager
@@ -39,25 +28,25 @@ final class BooksViewModel {
     func fetchBooks() {
         let cacheKey = "books"
         
-        onLoading?(true)
+        isLoading = true
         
         if let cached: [BookModel] = cacheManager.get(forKey: cacheKey) {
-            self.books = cached
-            self.onLoading?(false)
+            books = cached
+            isLoading = false
             return
         }
         
         potterService.getBooks { [weak self] result in
             guard let self = self else { return }
-            
-            self.onLoading?(false)
+            self.isLoading = false
             
             switch result {
             case .success(let response):
                 self.books = response.data
                 cacheManager.set(self.books, forKey: cacheKey, expiry: .hours(24))
             case .failure(let error):
-                self.onError?(error)
+                self.error = error
+                self.books = []
             }
         }
     }
@@ -67,26 +56,25 @@ final class BooksViewModel {
     /// - Parameter bookID: Chapter's book ID.
     func fetchChapters(bookID: String) {
         let cacheKey = "chapter_\(bookID)"
-        
-        onLoading?(true)
+        isLoading = true
         
         if let cached: [ChapterModel] = cacheManager.get(forKey: cacheKey) {
-            self.chapters = cached
-            self.onLoading?(false)
+            chapters = cached
+            isLoading = false
             return
         }
         
         potterService.getChapters(bookID: bookID) { [weak self] result in
             guard let self = self else { return }
-            
-            self.onLoading?(false)
+            self.isLoading = false
             
             switch result {
             case .success(let response):
                 self.chapters = response.data
                 cacheManager.set(self.chapters, forKey: cacheKey, expiry: .hours(24))
             case .failure(let error):
-                self.onError?(error)
+                self.error = error
+                self.chapters = []
             }
         }
     }
