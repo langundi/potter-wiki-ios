@@ -12,12 +12,12 @@ struct BooksResponse: Codable {
     let meta: MetaModel
 }
 
-struct BookModel: Identifiable, Codable, Hashable {
+struct BookModel: Identifiable, Codable, nonisolated Hashable {
     let id: String
     let attributes: BookAttributes
 }
 
-struct BookAttributes: Codable, Hashable {
+struct BookAttributes: Codable, nonisolated Hashable {
     let author: String
     let cover: String
     let pages: Int

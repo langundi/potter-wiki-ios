@@ -6,18 +6,20 @@
 //
 
 import UIKit
+import Combine
 import Kingfisher
 
 class BooksViewController: UIViewController {
     
-    
     // MARK: - Variables
     weak var coordinator: BooksCoordinator?
     private let vm: BooksViewModel
+    private var cancellables = Set<AnyCancellable>()
     
     
     // MARK: - UI Components
-    /// Modern `UICollectionView` approach using `UICollectionViewCompositionalLayout`.
+    private var dataSource: UICollectionViewDiffableDataSource<SectionEnum, BookModel>!
+    
     private var collectionView: UICollectionView = {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -64,15 +66,14 @@ class BooksViewController: UIViewController {
         
         bindViewModel()
         setupUI()
+        setupDataSource()
         vm.fetchBooks()
     }
     
     
     // MARK: - UI Setup
     private func setupUI() {
-        collectionView.dataSource = self
         collectionView.delegate = self
-        
         view.addSubview(collectionView)
         view.addSubview(spinner)
         
@@ -87,24 +88,38 @@ class BooksViewController: UIViewController {
         ])
     }
     
+    private func setupDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, book in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GridCell.identifier, for: indexPath) as! GridCell
+            let imageURL = URL(string: book.attributes.cover)
+            cell.configure(title: book.attributes.title, imageURL: imageURL)
+            return cell
+        }
+    }
+    
     private func bindViewModel() {
-        vm.onLoading = { [weak self] isLoading in
-            DispatchQueue.main.async {
+        vm.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
                 isLoading ? self?.spinner.startAnimating() : self?.spinner.stopAnimating()
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onBooksUpdated = { [weak self] in
-            DispatchQueue.main.async {
+        vm.$books
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] books in
                 self?.contentUnavailableConfiguration = nil
                 self?.collectionView.reloadData()
+                self?.applySnapshot(books: books)
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onError = { [weak self] error in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
+        vm.$error
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink{ [weak self] error in
+                guard let self = self else { return }
+                
                 switch error {
                 case .noInternet:
                     if !self.vm.books.isEmpty {
@@ -134,7 +149,14 @@ class BooksViewController: UIViewController {
                     )
                 }
             }
-        }
+            .store(in: &cancellables)
+    }
+    
+    private func applySnapshot(books: [BookModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SectionEnum, BookModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(books, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func showErrorState(icon: String, title: String, message: String) {
@@ -157,23 +179,10 @@ class BooksViewController: UIViewController {
 
 
 // MARK: - Collection View Delegate
-extension BooksViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        vm.books.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GridCell.identifier, for: indexPath) as! GridCell
-        let book = vm.books[indexPath.item]
-        
-        let imageURL = URL(string: book.attributes.cover)
-        cell.configure(title: book.attributes.title, imageURL: imageURL)
-        return cell
-    }
-    
+extension BooksViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let book = dataSource.itemIdentifier(for: indexPath) else { return }
         let cell = collectionView.cellForItem(at: indexPath)
-        let book = vm.books[indexPath.item]
         coordinator?.showBookDetail(book: book, sourceView: cell)
     }
 }

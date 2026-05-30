@@ -273,7 +273,7 @@ class SpellsViewController: UIViewController {
 // MARK: - Collection Delegate
 extension SpellsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let spell = vm.currentSpells[indexPath.row]
+        guard let spell = dataSource.itemIdentifier(for: indexPath) else { return }
         coordinator?.showSpellDetail(spell: spell)
     }
 }

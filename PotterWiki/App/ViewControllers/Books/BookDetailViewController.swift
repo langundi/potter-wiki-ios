@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 import Kingfisher
 
 class BookDetailViewController: UIViewController {
@@ -13,8 +14,9 @@ class BookDetailViewController: UIViewController {
     
     // MARK: - Variables
     weak var coordinator: BooksCoordinator?
-    private let vm: BooksViewModel
     var book: BookModel
+    private let vm: BooksViewModel
+    private var cancellables = Set<AnyCancellable>()
     
     
     // MARK: - UI Components
@@ -168,26 +170,29 @@ class BookDetailViewController: UIViewController {
     }
     
     private func bindViewModel() {
-        vm.onLoading = { [weak self] isLoading in
-            DispatchQueue.main.async {
+        vm.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
                 isLoading ? self?.chaptersSection.spinner.startAnimating() : self?.chaptersSection.spinner.stopAnimating()
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onChaptersUpdated = { [weak self] in
-            DispatchQueue.main.async {
+        vm.$chapters
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] chapters in
                 self?.chaptersSection.chapters = self?.vm.chapters ?? []
             }
-        }
+            .store(in: &cancellables)
         
         chaptersSection.onChapterTapped = { [weak self] chapter in
             self?.coordinator?.showChapterDetail(chapter: chapter)
         }
         
-        vm.onError = { [weak self] error in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
+        vm.$error
+            .receive(on: DispatchQueue.main)
+            .compactMap{ $0 }
+            .sink { [weak self] error in
+                guard let self = self else { return }
                 switch error {
                 case .noInternet:
                     if self.vm.chapters.isEmpty {
@@ -211,6 +216,6 @@ class BookDetailViewController: UIViewController {
                     )
                 }
             }
-        }
+            .store(in: &cancellables)
     }
 }

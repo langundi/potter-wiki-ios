@@ -276,7 +276,7 @@ class PotionsViewController: UIViewController {
 // MARK: - Collection View Delegate
 extension PotionsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let potion = vm.currentPotions[indexPath.row]
+        guard let potion = dataSource.itemIdentifier(for: indexPath) else { return }
         coordinator?.showPotionDetail(potion: potion)
     }
 }
