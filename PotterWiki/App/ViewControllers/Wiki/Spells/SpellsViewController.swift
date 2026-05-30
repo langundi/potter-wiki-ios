@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class SpellsViewController: UIViewController {
     
@@ -13,6 +14,7 @@ class SpellsViewController: UIViewController {
     // MARK: - Variables
     weak var coordinator: WikiCoordinator?
     private var vm: SpellsViewModel
+    private var cancellables = Set<AnyCancellable>()
     
     
     // MARK: - UI Components
@@ -20,6 +22,8 @@ class SpellsViewController: UIViewController {
     private var prevButton: UIBarButtonItem!
     private var nextButton: UIBarButtonItem!
     private var representative: UIBarButtonItem!
+    
+    private var dataSource: UICollectionViewDiffableDataSource<SectionEnum, SpellModel>!
     
     private let searchController = UISearchController(searchResultsController: nil)
     
@@ -64,6 +68,7 @@ class SpellsViewController: UIViewController {
         setupNavigationBar()
         setupSearchController()
         setupUI()
+        setupDataSource()
         vm.fetchSpells()
     }
     
@@ -121,7 +126,6 @@ class SpellsViewController: UIViewController {
     
     private func setupUI() {
         collectionView.delegate = self
-        collectionView.dataSource = self
         
         view.addSubview(collectionView)
         view.addSubview(spinner)
@@ -137,55 +141,83 @@ class SpellsViewController: UIViewController {
         ])
     }
     
+    private func setupDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, potion in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WikiCell.identifier, for: indexPath) as! WikiCell
+            
+            if let url = potion.attributes.image {
+                let imageURL = URL(string: url)
+                cell.configure(title: potion.attributes.name!, imageURL: imageURL)
+            } else {
+                cell.configure(title: potion.attributes.name!, imageURL: nil)
+            }
+            
+            return cell
+        }
+    }
+    
     private func bindViewModel() {
-        vm.onLoading = { [weak self] isLoading in
-            DispatchQueue.main.async {
+        vm.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
                 isLoading ? self?.spinner.startAnimating() : self?.spinner.stopAnimating()
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onSpellsUpdated = { [weak self] in
-            DispatchQueue.main.async {
+        vm.$currentSpells
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] spells in
                 self?.contentUnavailableConfiguration = nil
                 self?.enableNavBar()
-                self?.collectionView.reloadData()
+                self?.applySnapshot(spells: spells)
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onError = { [weak self] error in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                switch error {
-                case .noInternet:
-                    if self.vm.isSearching || !self.vm.currentSpells.isEmpty {
+        vm.$error
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] error in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    switch error {
+                    case .noInternet:
+                        if self.vm.isSearching || !self.vm.currentSpells.isEmpty {
+                            AlertManager.shared.showAlert(
+                                on: self,
+                                title: "No Connection",
+                                message: "Please check your internet connection and try again."
+                            )
+                        } else {
+                            self.showErrorState(
+                                icon: "wifi.slash",
+                                title: "No Connection",
+                                message: "Please check your internet connection and try again."
+                            )
+                        }
+                    case .responseError:
+                        self.showErrorState(
+                            icon: "exclamationmark.triangle",
+                            title: "Server Error",
+                            message: "Something went wrong on our end. Please try again later."
+                        )
+                    default:
                         AlertManager.shared.showAlert(
                             on: self,
-                            title: "No Connection",
-                            message: "Please check your internet connection and try again."
-                        )
-                    } else {
-                        self.showErrorState(
-                            icon: "wifi.slash",
-                            title: "No Connection",
-                            message: "Please check your internet connection and try again."
+                            title: "An Error Occured",
+                            message: error.message
                         )
                     }
-                case .responseError:
-                    self.showErrorState(
-                        icon: "exclamationmark.triangle",
-                        title: "Server Error",
-                        message: "Something went wrong on our end. Please try again later."
-                    )
-                default:
-                    AlertManager.shared.showAlert(
-                        on: self,
-                        title: "An Error Occured",
-                        message: error.message
-                    )
                 }
             }
-        }
+            .store(in: &cancellables)
+    }
+    
+    private func applySnapshot(spells: [SpellModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SectionEnum, SpellModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(spells, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func showErrorState(icon: String, title: String, message: String) {
@@ -239,25 +271,7 @@ class SpellsViewController: UIViewController {
 
 
 // MARK: - Collection Delegate
-extension SpellsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        vm.currentSpells.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WikiCell.identifier, for: indexPath) as! WikiCell
-        let potion = vm.currentSpells[indexPath.row]
-        
-        if let url = potion.attributes.image {
-            let imageURL = URL(string: url)
-            cell.configure(title: potion.attributes.name!, imageURL: imageURL)
-        } else {
-            cell.configure(title: potion.attributes.name!, imageURL: nil)
-        }
-        
-        return cell
-    }
-    
+extension SpellsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let spell = vm.currentSpells[indexPath.row]
         coordinator?.showSpellDetail(spell: spell)
@@ -269,7 +283,7 @@ extension SpellsViewController: UICollectionViewDelegate, UICollectionViewDataSo
 extension SpellsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
-        vm.search(query: query)
+        vm.searchQuery.send(query)
     }
 }
 

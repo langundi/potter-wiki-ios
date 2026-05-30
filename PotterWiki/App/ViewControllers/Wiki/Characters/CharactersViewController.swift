@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class CharactersViewController: UIViewController {
 
@@ -13,6 +14,7 @@ class CharactersViewController: UIViewController {
     // MARK: - Variables
     weak var coordinator: WikiCoordinator?
     private var vm: CharactersViewModel
+    private var cancellables = Set<AnyCancellable>()
     
     
     // MARK: - UI Components
@@ -20,6 +22,8 @@ class CharactersViewController: UIViewController {
     private var prevButton: UIBarButtonItem!
     private var nextButton: UIBarButtonItem!
     private var representative: UIBarButtonItem!
+    
+    private var dataSource: UICollectionViewDiffableDataSource<SectionEnum, CharacterModel>!
     
     private let searchController = UISearchController(searchResultsController: nil)
     
@@ -65,6 +69,7 @@ class CharactersViewController: UIViewController {
         setupNavigationBar()
         setupSearchController()
         setupUI()
+        setupDataSource()
         vm.fetchCharacters()
     }
     
@@ -121,7 +126,6 @@ class CharactersViewController: UIViewController {
     
     private func setupUI() {
         collectionView.delegate = self
-        collectionView.dataSource = self
         
         view.addSubview(collectionView)
         view.addSubview(spinner)
@@ -137,25 +141,52 @@ class CharactersViewController: UIViewController {
         ])
     }
     
+    private func setupDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, character in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WikiCell.identifier, for: indexPath) as! WikiCell
+            
+            if let name = character.attributes.name {
+                if let image = character.attributes.image {
+                    let url = URL(string: image)
+                    cell.configure(title: name, imageURL: url)
+                } else {
+                    cell.configure(title: name, imageURL: nil)
+                }
+            }
+            
+            return cell
+        }
+    }
+    
+    private func applySnapshot(characters: [CharacterModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SectionEnum, CharacterModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(characters, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
     private func bindViewModel() {
-        vm.onLoading = { [weak self] isLoading in
-            DispatchQueue.main.async {
+        vm.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
                 isLoading ? self?.spinner.startAnimating() : self?.spinner.stopAnimating()
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onCharactersUpdated = { [weak self] in
-            DispatchQueue.main.async {
+        vm.$currentCharacters
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] characters in
                 self?.contentUnavailableConfiguration = nil
                 self?.enableNavBar()
-                self?.collectionView.reloadData()
+                self?.applySnapshot(characters: characters)
             }
-        }
+            .store(in: &cancellables)
         
-        vm.onError = { [weak self] error in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
+        vm.$error
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] error in
+                guard let self = self else { return }
                 switch error {
                 case .noInternet:
                     if self.vm.isSearching || !self.vm.currentCharacters.isEmpty {
@@ -185,7 +216,7 @@ class CharactersViewController: UIViewController {
                     )
                 }
             }
-        }
+            .store(in: &cancellables)
     }
     
     private func showErrorState(icon: String, title: String, message: String) {
@@ -239,29 +270,9 @@ class CharactersViewController: UIViewController {
 
 
 // MARK: - Collection View Delegate
-extension CharactersViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        vm.currentCharacters.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WikiCell.identifier, for: indexPath) as! WikiCell
-        let character = vm.currentCharacters[indexPath.row]
-        
-        if let name = character.attributes.name {
-            if let url = character.attributes.image {
-                let imageURL = URL(string: url)
-                cell.configure(title: name, imageURL: imageURL)
-            } else {
-                cell.configure(title: name, imageURL: nil)
-            }
-        }
-        
-        return cell
-    }
-    
+extension CharactersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let character = vm.currentCharacters[indexPath.row]
+        guard let character = dataSource.itemIdentifier(for: indexPath) else { return }
         coordinator?.showCharacterDetail(character: character)
     }
 }
@@ -271,6 +282,6 @@ extension CharactersViewController: UICollectionViewDelegate, UICollectionViewDa
 extension CharactersViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
-        vm.search(query: query)
+        vm.searchQuery.send(query)
     }
 }

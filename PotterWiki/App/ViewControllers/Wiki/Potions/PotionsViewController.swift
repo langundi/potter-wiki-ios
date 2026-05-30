@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class PotionsViewController: UIViewController {
     
@@ -13,6 +14,7 @@ class PotionsViewController: UIViewController {
     // MARK: - Variables
     weak var coordinator: WikiCoordinator?
     private var vm: PotionsViewModel
+    private var cancellables = Set<AnyCancellable>()
     
     
     // MARK: - UI Components
@@ -20,6 +22,8 @@ class PotionsViewController: UIViewController {
     private var prevButton: UIBarButtonItem!
     private var nextButton: UIBarButtonItem!
     private var representative: UIBarButtonItem!
+    
+    private var dataSource: UICollectionViewDiffableDataSource<SectionEnum, PotionModel>!
     
     private let searchController = UISearchController(searchResultsController: nil)
     
@@ -65,6 +69,7 @@ class PotionsViewController: UIViewController {
         setupNavigationBar()
         setupSearchController()
         setupUI()
+        setupDataSource()
         vm.fetchPotions()
     }
     
@@ -122,7 +127,6 @@ class PotionsViewController: UIViewController {
     
     private func setupUI() {
         collectionView.delegate = self
-        collectionView.dataSource = self
         
         view.addSubview(collectionView)
         view.addSubview(spinner)
@@ -138,55 +142,85 @@ class PotionsViewController: UIViewController {
         ])
     }
     
-    private func bindViewModel() {
-        vm.onLoading = { [weak self] isLoading in
-            DispatchQueue.main.async {
-                isLoading ? self?.spinner.startAnimating() : self?.spinner.stopAnimating()
-            }
-        }
-        
-        vm.onPotionsUpdated = { [weak self] in
-            DispatchQueue.main.async {
-                self?.contentUnavailableConfiguration = nil
-                self?.enableNavBar()
-                self?.collectionView.reloadData()
-            }
-        }
-        
-        vm.onError = { [weak self] error in
-            guard let self = self else { return }
+    private func setupDataSource() {
+        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView) { collectionView, indexPath, potion in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WikiCell.identifier, for: indexPath) as! WikiCell
             
-            DispatchQueue.main.async {
-                switch error {
-                case .noInternet:
-                    if self.vm.isSearching || !self.vm.currentPotions.isEmpty {
-                        AlertManager.shared.showAlert(
-                            on: self,
-                            title: "No Connection",
-                            message: "Please check your internet connection and try again."
-                        )
-                    } else {
-                        self.showErrorState(
-                            icon: "wifi.slash",
-                            title: "No Connection",
-                            message: "Please check your internet connection and try again."
-                        )
-                    }
-                case .responseError:
-                    self.showErrorState(
-                        icon: "exclamationmark.triangle",
-                        title: "Server Error",
-                        message: "Something went wrong on our end. Please try again later."
-                    )
-                default:
-                    AlertManager.shared.showAlert(
-                        on: self,
-                        title: "An Error Occured",
-                        message: error.message
-                    )
+            if let name = potion.attributes.name {
+                if let url = potion.attributes.image {
+                    let imageURL = URL(string: url)
+                    cell.configure(title: name, imageURL: imageURL)
+                } else {
+                    cell.configure(title: name, imageURL: nil)
                 }
             }
+            
+            return cell
         }
+    }
+    
+    private func bindViewModel() {
+        vm.$isLoading
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                isLoading ? self?.spinner.startAnimating() : self?.spinner.stopAnimating()
+            }
+            .store(in: &cancellables)
+        
+        vm.$currentPotions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] potions in
+                self?.contentUnavailableConfiguration = nil
+                self?.enableNavBar()
+                self?.applySnapshot(potions: potions)
+            }
+            .store(in: &cancellables)
+        
+        vm.$error
+            .receive(on: DispatchQueue.main)
+            .compactMap { $0 }
+            .sink { [weak self] error in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    switch error {
+                    case .noInternet:
+                        if self.vm.isSearching || !self.vm.currentPotions.isEmpty {
+                            AlertManager.shared.showAlert(
+                                on: self,
+                                title: "No Connection",
+                                message: "Please check your internet connection and try again."
+                            )
+                        } else {
+                            self.showErrorState(
+                                icon: "wifi.slash",
+                                title: "No Connection",
+                                message: "Please check your internet connection and try again."
+                            )
+                        }
+                    case .responseError:
+                        self.showErrorState(
+                            icon: "exclamationmark.triangle",
+                            title: "Server Error",
+                            message: "Something went wrong on our end. Please try again later."
+                        )
+                    default:
+                        AlertManager.shared.showAlert(
+                            on: self,
+                            title: "An Error Occured",
+                            message: error.message
+                        )
+                    }
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func applySnapshot(potions: [PotionModel]) {
+        var snapshot = NSDiffableDataSourceSnapshot<SectionEnum, PotionModel>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(potions, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: true)
     }
     
     private func showErrorState(icon: String, title: String, message: String) {
@@ -240,27 +274,7 @@ class PotionsViewController: UIViewController {
 
 
 // MARK: - Collection View Delegate
-extension PotionsViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        vm.currentPotions.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WikiCell.identifier, for: indexPath) as! WikiCell
-        let potion = vm.currentPotions[indexPath.row]
-        
-        if let name = potion.attributes.name {
-            if let url = potion.attributes.image {
-                let imageURL = URL(string: url)
-                cell.configure(title: name, imageURL: imageURL)
-            } else {
-                cell.configure(title: name, imageURL: nil)
-            }
-        }
-        
-        return cell
-    }
-    
+extension PotionsViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let potion = vm.currentPotions[indexPath.row]
         coordinator?.showPotionDetail(potion: potion)
@@ -272,6 +286,6 @@ extension PotionsViewController: UICollectionViewDelegate, UICollectionViewDataS
 extension PotionsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let query = searchController.searchBar.text ?? ""
-        vm.search(query: query)
+        vm.searchQuery.send(query)
     }
 }

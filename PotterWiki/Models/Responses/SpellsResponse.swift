@@ -12,12 +12,12 @@ struct SpellsResponse: Codable {
     let meta: MetaModel
 }
 
-struct SpellModel: Identifiable, Codable, Hashable {
+struct SpellModel: Identifiable, Codable, nonisolated Hashable, Sendable {
     let id: String
     let attributes: SpellAttributes
 }
 
-struct SpellAttributes: Codable, Hashable {
+struct SpellAttributes: Codable, nonisolated Hashable {
     let slug: String?
     let category: String?
     let creator: String?

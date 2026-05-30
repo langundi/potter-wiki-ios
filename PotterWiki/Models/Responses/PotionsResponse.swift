@@ -12,12 +12,12 @@ struct PotionsResponse: Codable {
     let meta: MetaModel
 }
 
-struct PotionModel: Identifiable, Codable, Hashable {
+struct PotionModel: Identifiable, Codable, nonisolated Hashable, Sendable {
     let id: String
     let attributes: PotionAttributes
 }
 
-struct PotionAttributes: Codable, Hashable {
+struct PotionAttributes: Codable, nonisolated Hashable {
     let slug: String?
     let characteristics: String?
     let difficulty: String?

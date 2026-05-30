@@ -6,27 +6,26 @@
 //
 
 import Foundation
+import Combine
 
 final class CharactersViewModel {
     
-    var onLoading: ((Bool) -> Void)?
-    var onCharactersUpdated: (() -> Void)?
-    var onError: ((NetworkError) -> Void)?
+    // Published
+    @Published private(set) var currentCharacters: [CharacterModel] = []
+    @Published private(set) var isLoading: Bool = false
+    @Published private(set) var error: NetworkError? = nil
     
+    // Search
+    let searchQuery = CurrentValueSubject<String, Never>("")
+    private var cancellables = Set<AnyCancellable>()
+    
+    // Pagination
     private(set) var pagination: PaginationModel?
-    
-    // Pagination with an array, contains 100 items each.
     private(set) var currentPageIndex: Int = 0
     private(set) var charactersPages: [[CharacterModel]] = []
     
-    // Returns current index array or search result
-    var currentCharacters: [CharacterModel] {
-        if isSearching {
-            return searchResults
-        }
-        guard !charactersPages.isEmpty else { return [] }
-        return charactersPages[currentPageIndex]
-    }
+    // Computed Properties
+    var isSearching: Bool { !searchQuery.value.isEmpty }
     
     var canGoNext: Bool {
         currentPageIndex < charactersPages.count - 1 || pagination?.next != nil
@@ -36,16 +35,30 @@ final class CharactersViewModel {
         currentPageIndex > 0
     }
     
-    private(set) var isSearching: Bool = false
-    private(set) var searchResults: [CharacterModel] = []
-    private var searchTask: DispatchWorkItem?
-    
+    // Dependencies
     private let potterService: PotterServiceProtocol
     private let cacheManager: CacheManager
     
     init(potterService: PotterServiceProtocol, cacheManager: CacheManager) {
         self.potterService = potterService
         self.cacheManager = cacheManager
+        
+        bindSearch()
+    }
+    
+    private func bindSearch() {
+        searchQuery
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.global())
+            .removeDuplicates()
+            .sink { [weak self] query in
+                guard let self = self else { return }
+                if query.isEmpty {
+                    self.currentCharacters = self.charactersPages.isEmpty ? [] : self.charactersPages[self.currentPageIndex]
+                } else {
+                    self.fetchSearchResults(query: query)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     
@@ -57,79 +70,53 @@ final class CharactersViewModel {
         let characterCache = "characters_page_\(pageToFetch)"
         let paginationCache = "characters_pagination_\(pageToFetch)"
         
-        onLoading?(true)
+        isLoading = true
         
-        if let characterCache: [CharacterModel] = cacheManager.get(forKey: characterCache),
-           let paginationCache: PaginationModel = cacheManager.get(forKey: paginationCache) {
-            self.charactersPages.append(characterCache)
-            self.currentPageIndex = self.charactersPages.count - 1
-            self.pagination = paginationCache
-            self.onCharactersUpdated?()
-            self.onLoading?(false)
+        if let cachedCharacters: [CharacterModel] = cacheManager.get(forKey: characterCache),
+            let cachedPagination: PaginationModel = cacheManager.get(forKey: paginationCache) {
+            charactersPages.append(cachedCharacters)
+            currentPageIndex = self.charactersPages.count - 1
+            pagination = cachedPagination
+            currentCharacters = cachedCharacters
+            isLoading = false
             return
         }
         
         potterService.getCharacters(page: String(pageToFetch)) { [weak self] result in
             guard let self = self else { return }
-            
-            onLoading?(false)
+            self.isLoading = false
             
             switch result {
             case .success(let response):
                 self.charactersPages.append(response.data)
                 self.currentPageIndex = self.charactersPages.count - 1
                 self.pagination = response.meta.pagination
-                self.onCharactersUpdated?()
+                self.currentCharacters = response.data
                 
                 cacheManager.set(self.charactersPages[currentPageIndex], forKey: characterCache)
                 cacheManager.set(self.pagination, forKey: paginationCache)
             case .failure(let error):
-                self.onError?(error)
+                self.error = error
             }
         }
-    }
-    
-    
-    /// Search characters by name. Fires `fetchSearchResult` function.
-    /// - Parameter query: Character name.
-    func search(query: String) {
-        searchTask?.cancel()
-        
-        guard !query.isEmpty else {
-            isSearching = false
-            searchResults = []
-            onCharactersUpdated?()
-            return
-        }
-        
-        isSearching = true
-        
-        let task = DispatchWorkItem { [weak self] in
-            self?.fetchSearchResults(query: query)
-        }
-        
-        searchTask = task
-        DispatchQueue.global().asyncAfter(deadline: .now() + 0.5, execute: task)
     }
     
     
     /// Fetch characters by name.
     /// - Parameter query: Character name.
     private func fetchSearchResults(query: String) {
-        onLoading?(true)
+        isLoading = true
         
         potterService.getCharactersByName(name: query) { [weak self] result in
             guard let self = self else { return }
-            
-            self.onLoading?(false)
+            isLoading = false
             
             switch result {
             case .success(let response):
-                self.searchResults = response.data
-                self.onCharactersUpdated?()
+                self.currentCharacters = response.data
             case .failure(let error):
-                self.onError?(error)
-                self.onCharactersUpdated?()
+                self.error = error
+                self.currentCharacters = []
             }
         }
     }
@@ -140,7 +127,7 @@ final class CharactersViewModel {
         guard !isSearching else { return }
         if currentPageIndex < charactersPages.count - 1 {
             currentPageIndex += 1
-            onCharactersUpdated?()
+            currentCharacters = charactersPages[currentPageIndex]
         } else {
             fetchCharacters()
         }
@@ -151,7 +138,7 @@ final class CharactersViewModel {
     func prevPage() {
         guard canGoPrev else { return }
         currentPageIndex -= 1
-        onCharactersUpdated?()
+        currentCharacters = charactersPages[currentPageIndex]
     }
     
     
@@ -160,5 +147,6 @@ final class CharactersViewModel {
         charactersPages = []
         pagination = nil
         currentPageIndex = 0
+        currentCharacters = []
     }
 }
